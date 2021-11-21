@@ -10,6 +10,7 @@ DATASET_NAMES = [
       'raw-data-kaggle/images_radiopedia.npy',
       'raw-data-kaggle/masks_radiopedia.npy',
 ]
+LABELS = ['Ground Glass', 'Consolidation', 'Lungs Other', 'Background']
 
   
 def load_datasets_by_names(
@@ -55,12 +56,25 @@ def resize_dataset(dataset: np.ndarray,
     return np.array([np.array(Image.fromarray(image).resize(size))
                      for image in dataset])
 
-def show_im_row(images: np.ndarray, size: int = 10) -> None:
+def show_im_row(images: np.ndarray,
+                size: int = 10,
+                titles: Optional[List[str]] = None
+                ) -> None:
     """Shows images in a row."""
     n = images.shape[0]
+    if titles is None:
+        titles = [''] * n
     figure, axes = plt.subplots(1, n, figsize=(n * size, size))
-    for ax, image in zip(axes, images):
+    for ax, image, title in zip(axes, images, titles):
         ax.imshow(image, cmap='Greys')
+        ax.set_title(title)
         ax.set_xticks([])
         ax.set_yticks([])
+    plt.show()
+    
+def plot_loss(model) -> None:
+    """Draws loss plot from model's `loss_history` parameter."""
+    plt.plot(range(len(model.loss_history)), model.loss_history)
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
     plt.show()
