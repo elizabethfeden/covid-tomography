@@ -1,14 +1,16 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+
 from PIL import Image
+from pathlib import Path
 from typing import List, Tuple, Optional
 
 
 DATASET_NAMES = [
-      'raw-data-kaggle/images_medseg.npy',
-      'raw-data-kaggle/masks_medseg.npy',
-      'raw-data-kaggle/images_radiopedia.npy',
-      'raw-data-kaggle/masks_radiopedia.npy',
+      Path('raw-data-kaggle/images_medseg.npy'),
+      Path('raw-data-kaggle/masks_medseg.npy'),
+      Path('raw-data-kaggle/images_radiopedia.npy'),
+      Path('raw-data-kaggle/masks_radiopedia.npy'),
 ]
 LABELS = ['Ground Glass', 'Consolidation', 'Lungs Other', 'Background']
 
@@ -26,7 +28,7 @@ def load_datasets_by_names(
   """
   datasets = []
   for filename in filenames:
-    d =  np.load(filename)
+    d = np.load(filename)
     if size is not None:
       new_shape = [d.shape[3], d.shape[0], *size]
       d_new = np.zeros(new_shape)
@@ -45,7 +47,7 @@ def load_datasets(prefix_path: str,
                   size: Optional[Tuple[int, int]] = None
                   ) -> List[np.ndarray]:
   return load_datasets_by_names(
-      [prefix_path + name for name in DATASET_NAMES],
+      [Path(prefix_path) / name for name in DATASET_NAMES],
       size=size)
 
 
