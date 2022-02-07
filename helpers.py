@@ -80,3 +80,4 @@ def plot_loss(model) -> None:
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.show()
+
